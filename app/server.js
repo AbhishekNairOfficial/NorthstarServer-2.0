@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const app = express();
-const dbConfig = require('./configs/database.config.js');
+const dbConfig = require('../configs/database.config.js');
 const mongoose = require('mongoose');
 
 // mongoose.Promise = global.Promise;
