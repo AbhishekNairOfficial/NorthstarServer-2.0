@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const app = express();
-const dbConfig = require('../configs/database.config.js');
+const dbConfig = require('../../configs/database.config');
 const mongoose = require('mongoose');
 
 // mongoose.Promise = global.Promise;
@@ -17,6 +17,10 @@ mongoose.connect(dbConfig.url, {
     console.log('Could not connect to the database. Exiting now...', err);
     process.exit();
 });
+
+app.get('/home',(req,res)=>{
+    res.send("home page u loggeds")
+})
 
 app.get('/', (req, res) =>{
     res.json({message : "Welcom to node server of northStar application"});
