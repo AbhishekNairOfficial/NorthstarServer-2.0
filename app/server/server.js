@@ -26,6 +26,7 @@ app.get('/', (req, res) =>{
     res.json({message : "Welcom to node server of northStar application"});
 });
 
-app.listen(8080, ()=>{
+const port = process.env.port || 8000
+app.listen(port, ()=>{
     console.log("Listening on port 8080")
 });
