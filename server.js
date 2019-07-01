@@ -34,7 +34,7 @@ app.get('/home',(req,res)=>{
 app.use('/api', route);
 
 const port = process.env.port || 8080
-app.listen(port, ()=>{
+let server=app.listen(port, ()=>{
     console.log("Listening on port 8080");
 });
 const io=socket(server);
