@@ -5,7 +5,7 @@ const dbConfig = require('./configs/database.config');
 const mongoose = require('mongoose');
 const chalk=require('chalk');
 const socket=require('socket.io');
-const Chats = require('../app/modal/chat.model');
+const Chats = require('./app/models/chat.model');
 const route = require('./app/routes/api')
 
 app.use(bodyParser.urlencoded({ extended: true }));
