@@ -19,19 +19,19 @@ mongoose.connect(dbConfig.url, {
     console.log('Could not connect to the database. Exiting now...', err);
     process.exit();
 });
-app.use('/api', route);
-app.get('/home',(req,res)=>{
-    res.send("home page u loggeds")
-})
-
 
 app.get('/', (req, res) =>{
     res.json({message : "Welcom to node server of northStar application"});
 });
+app.get('/home',(req,res)=>{
+    res.send("home page u loggeds")
+})
 
-const port = process.env.port || 8000
+app.use('/api', route);
+
+const port =  8080
 let server=app.listen(port, ()=>{
-    console.log("Listening on port 8080")
+    console.log(`Listening on port ${port}`)
 });
 
 const io=socket(server);
