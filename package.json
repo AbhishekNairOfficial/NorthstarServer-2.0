@@ -3,21 +3,24 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node server.js",
+    "start": "nodemon server.js",
     "test": "jest"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
+    "chalk": "^2.4.2",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.18.0",
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "express": "^4.16.3",
-    "mongoose": "^5.2.15"
+    "mongoose": "^5.2.15",
+    "socket.io": "^2.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",
     "@babel/runtime": "^7.4.5",
     "babel-jest": "^24.8.0",
+    "nodemon": "^1.19.1",
     "eslint": "^6.0.1",
     "eslint-plugin-react": "^7.14.2",
     "eslint-config-rallycoding": "^3.2.0"
