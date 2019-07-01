@@ -7,6 +7,7 @@ const chalk=require('chalk');
 const socket=require('socket.io');
 const Chats = require('./app/models/chat.model');
 const route = require('./app/routes/api')
+const scheduler=require('./services/notification.services');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -15,6 +16,9 @@ mongoose.connect(dbConfig.url, {
     useNewUrlParser: true
 }).then(() => {
     console.log("Successfully connected to the database");
+
+    // Uncomment to start the scheduler for notification
+    // scheduler();
 }).catch(err => {
     console.log('Could not connect to the database. Exiting now...', err);
     process.exit();
@@ -29,11 +33,10 @@ app.get('/home',(req,res)=>{
 
 app.use('/api', route);
 
-const port =  8080
-let server=app.listen(port, ()=>{
-    console.log(`Listening on port ${port}`)
+const port = process.env.port || 8080
+app.listen(port, ()=>{
+    console.log("Listening on port 8080");
 });
-
 const io=socket(server);
 
 io.on('connection',(socket)=>{
