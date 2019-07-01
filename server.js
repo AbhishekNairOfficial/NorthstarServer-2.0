@@ -5,6 +5,7 @@ const app = express();
 const dbConfig = require('./configs/database.config');
 const mongoose = require('mongoose');
 const route = require('./app/routes/api')
+const scheduler=require('./services/notification.services');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -13,6 +14,9 @@ mongoose.connect(dbConfig.url, {
     useNewUrlParser: true
 }).then(() => {
     console.log("Successfully connected to the database");
+
+    // Uncomment to start the scheduler for notification
+    // scheduler();
 }).catch(err => {
     console.log('Could not connect to the database. Exiting now...', err);
     process.exit();
@@ -29,5 +33,5 @@ app.get('/', (req, res) =>{
 
 const port = process.env.port || 8000
 app.listen(port, ()=>{
-    console.log("Listening on port 8000")
+    console.log("Listening on port 8000");
 });
