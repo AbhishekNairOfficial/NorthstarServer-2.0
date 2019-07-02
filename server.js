@@ -33,9 +33,9 @@ app.get('/home',(req,res)=>{
 
 app.use('/api', route);
 
-const port = process.env.port || 80
+const port = process.env.port || 5000
 let server=app.listen(port, ()=>{
-    console.log("Listening on port 80");
+    console.log("Listening on port 5000");
 });
 const io=socket(server);
 
