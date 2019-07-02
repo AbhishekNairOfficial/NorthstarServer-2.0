@@ -33,10 +33,19 @@ app.get('/home',(req,res)=>{
 
 app.use('/api', route);
 
-const port = process.env.port || 5000
-let server=app.listen(port, ()=>{
-    console.log("Listening on port 5000");
+// const port = process.env.port || 5000
+// let server=app.listen(port, ()=>{
+//     console.log("Listening on port 5000");
+// });
+
+var server_port = process.env.YOUR_PORT || process.env.PORT || 5000;
+var server_host = process.env.YOUR_HOST || '0.0.0.0';
+server.listen(server_port, server_host, function() {
+    console.log('Listening on port %d', server_port);
 });
+
+
+
 const io=socket(server);
 
 io.on('connection',(socket)=>{
