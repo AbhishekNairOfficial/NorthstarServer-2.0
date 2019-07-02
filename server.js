@@ -46,33 +46,33 @@ app.listen(server_port, server_host, function() {
 
 
 
-const io=socket(server);
+// const io=socket(server);
 
-io.on('connection',(socket)=>{
-    console.log(chalk.bgBlue("client connected!!",socket.id))
+// io.on('connection',(socket)=>{
+//     console.log(chalk.bgBlue("client connected!!",socket.id))
     
-    socket.on('user-join',()=>{
-        Chats.find().then(response=>{
-            socket.emit('user-history-chat',response);
-        }).catch(err=>{
-            socket.emit('error');
-        })
+//     socket.on('user-join',()=>{
+//         Chats.find().then(response=>{
+//             socket.emit('user-history-chat',response);
+//         }).catch(err=>{
+//             socket.emit('error');
+//         })
         
-    })
+//     })
 
-    socket.on('chat-client',(data)=>{
-        let chatEntery=new Chats(data)
-        chatEntery.save()
-        .then(response=>{
-            io.sockets.emit('chat-server',data);
-        }).catch(err=>{
-            socket.emit('error');
-        })
+//     socket.on('chat-client',(data)=>{
+//         let chatEntery=new Chats(data)
+//         chatEntery.save()
+//         .then(response=>{
+//             io.sockets.emit('chat-server',data);
+//         }).catch(err=>{
+//             socket.emit('error');
+//         })
        
-    })
+//     })
 
-    socket.on('typing-client',(data)=>{
-        socket.broadcast.emit('typing-server',data);
-    })
+//     socket.on('typing-client',(data)=>{
+//         socket.broadcast.emit('typing-server',data);
+//     })
    
-})
+// })
