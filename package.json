@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "nodemon index.js",
     "test": "jest"
   },
   "dependencies": {
@@ -14,7 +14,23 @@
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "express": "^4.16.3",
     "mongoose": "^5.2.15",
-    "socket.io": "^2.2.0"
+    "socket.io": "^2.2.0",
+    "bluebird": "3.5.1",
+    "compression": "1.7.2",
+    "cookie-parser": "1.4.3",
+    "cors": "2.8.4",
+    "debug": "^2.4.5",
+    "dotenv": "^4.0.0",
+    "express-jwt": "5.3.1",
+    "express-validation": "1.0.2",
+    "express-winston": "2.5.0",
+    "helmet": "3.12.0",
+    "http-status": "1.0.1",
+    "joi": "10.6.0",
+    "jsonwebtoken": "7.1.9",
+    "method-override": "^2.3.10",
+    "morgan": "1.9.0",
+    "winston": "2.4.1"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",
@@ -23,7 +39,20 @@
     "nodemon": "^1.19.1",
     "eslint": "^6.0.1",
     "eslint-plugin-react": "^7.14.2",
-    "eslint-config-rallycoding": "^3.2.0"
+    "eslint-config-rallycoding": "^3.2.0",
+    "chai": "4.1.2",
+    "coveralls": "^3.0.0",
+    "cross-env": "5.1.4",
+    "cz-conventional-changelog": "1.2.0",
+    "eslint-config-airbnb-base": "7.1.0",
+    "eslint-plugin-import": "1.16.0",
+    "eslint-watch": "2.1.14",
+    "husky": "0.14.3",
+    "istanbul": "1.1.0-alpha.1",
+    "mocha": "3.5.0",
+    "supertest": "3.0.0",
+    "supertest-as-promised": "4.0.2",
+    "validate-commit-msg": "^2.14.0"
   },
   "jest": {
     "preset": "react-native"
