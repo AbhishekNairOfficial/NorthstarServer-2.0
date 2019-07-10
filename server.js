@@ -8,8 +8,13 @@ const socket=require('socket.io');
 const Chats = require('./app/models/chat.model');
 const route = require('./app/routes/api')
 const scheduler=require('./services/notification.services');
+const fetch = require("node-fetch");
+const redis = require('redis');
 
 app.use(bodyParser.urlencoded({ extended: true }));
+// create and connect redis client to local instance.
+const redisClient = redis.createClient(6379);
+
 app.use(bodyParser.json());
 
 mongoose.connect(dbConfig.url, {
@@ -76,3 +81,47 @@ io.on('connection',(socket)=>{
     })
    
 })
+
+// get photos list
+app.get('/photos', (req, res) => {
+    // key to store results in Redis store
+    const photosRedisKey = 'user:photos';
+
+    // Try fetching the result from Redis first in case we have it cached
+    return redisClient.get(photosRedisKey, (err, photos) => {
+        console.log("inside return function");
+        // If that key exists in Redis store
+        if (photos) {
+            console.log("inside if statement");
+            return res.json({
+                source: 'cache',
+                data: JSON.parse(photos)
+            })
+
+        } else { // Key does not exist in Redis store
+            console.log("fetch photos");
+            // Fetch directly from remote api
+            fetch('https://jsonplaceholder.typicode.com/photos')
+                .then(response => response.json())
+                .then(photos => {
+                    console.log("photo fetch success");
+                    // Save the  API response in Redis store,  data expire time in 3600 seconds, it means one hour
+                    redisClient.setex(photosRedisKey, 3600, JSON.stringify(photos))
+
+                    // Send JSON response to client
+                    return res.json({
+                        source: 'api',
+                        data: photos
+                    })
+
+                })
+                .catch(error => {
+                    console.log("photo fetch error");
+                    // log error message
+                    console.log(error)
+                    // send error to the client 
+                    return res.json(error.toString())
+                })
+        }
+    });
+});
