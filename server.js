@@ -13,7 +13,8 @@ const redis = require('redis');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 // create and connect redis client to local instance.
-const redisClient = redis.createClient(6379);
+var redis_server_port = process.env.YOUR_PORT || process.env.PORT || 6379;
+const redisClient = redis.createClient(redis_server_port);
 
 app.use(bodyParser.json());
 
