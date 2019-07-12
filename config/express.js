@@ -10,15 +10,40 @@ const expressWinston = require('express-winston');
 const expressValidation = require('express-validation');
 const helmet = require('helmet');
 const winstonInstance = require('./winston');
-const routes = require('../index.route');
+const gateway = require('../middleware/getway');
 const config = require('./config');
 const APIError = require('../server/helpers/APIError');
 
 const app = express();
 
+const redis = require('redis');
+const { RateLimiterRedis } = require('rate-limiter-flexible');
+
 if (config.env === 'development') {
   app.use(logger('dev'));
 }
+
+
+// Maximum 20 requests per second
+const rateLimiter = new RateLimiterRedis({
+  storeClient: redisClient,
+  points: 20,
+  duration: 1,
+  blockDuration: 2, // block for 2 seconds if consumed more than 20 points per second
+ });
+
+ const rateLimiterMiddleware = (req, res, next) => {
+  rateLimiter.consume(req.ip)
+     .then(() => {
+         next();
+     })
+     .catch(_ => {
+         res.status(429).send('Too Many Requests');
+     });
+  };
+
+
+app.use(rateLimiterMiddleware);
 
 // parse body params and attache them to req.body
 app.use(bodyParser.json());
@@ -47,7 +72,7 @@ if (config.env === 'development') {
 }
 
 // mount all routes on /api path
-app.use('/api', routes);
+app.use('/', gateway);
 
 // if error is not an instanceOf APIError, convert it.
 app.use((err, req, res, next) => {

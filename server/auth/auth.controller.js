@@ -1,13 +1,16 @@
-const jwt = require('jsonwebtoken');
+
 const httpStatus = require('http-status');
 const APIError = require('../helpers/APIError');
 const config = require('../../config/config');
+const tokenMan = require('../token-manager/token-manager');
+const users = require('../user/user.model');
+const bcrypt = require('bcryptjs');
 
 // sample user, used for authentication
-const user = {
-  username: 'react',
-  password: 'express'
-};
+// const user = {
+//   username: 'react',
+//   password: 'express'
+// };
 
 /**
  * Returns jwt token if valid username and password is provided
@@ -16,35 +19,46 @@ const user = {
  * @param next
  * @returns {*}
  */
+
 function login(req, res, next) {
   // Ideally you'll fetch this from the db
   // Idea here was to show how jwt works with simplicity
-  if (req.body.username === user.username && req.body.password === user.password) {
-    const token = jwt.sign({
-      username: user.username
-    }, config.jwtSecret);
-    return res.json({
-      token,
-      username: user.username
-    });
+  // if (req.body.username === user.username && req.body.password === user.password) {
+  //   const token = jwt.sign({
+  //     username: user.username
+  //   }, config.jwtSecret);
+  //   return res.json({
+  //     token,
+  //     username: user.username
+  //   });
+
+  let userName = req.body.userName;
+  let password = req.body.password;
+  if (userName && password) {
+    users.findOne({ userName: req.body.userName }).then(response => {
+      const status = bcrypt.compareSync(password, response.password);
+      if (status) {
+        res.send({ "token": tokenMan.sign({ username: user.username }, { audience: req.headers.host }) });
+      }
+      else {
+        res.status(401).json({ message: "wrong user name or password" });
+      }
+
+
+    }).catch(err => {
+
+      res.status(401).json({ message: "wrong user name or password" });
+
+    })
+  } else {
+
+    res.status(401).json({ message: "wrong user name or password" });
+
   }
 
-  const err = new APIError('Authentication error', httpStatus.UNAUTHORIZED, true);
-  return next(err);
+  //  const err = new APIError('Authentication error', httpStatus.UNAUTHORIZED, true);
+  // return next(err);
 }
 
-/**
- * This is a protected route. Will return random number only if jwt token is provided in header.
- * @param req
- * @param res
- * @returns {*}
- */
-function getRandomNumber(req, res) {
-  // req.user is assigned by jwt middleware if valid token is provided
-  return res.json({
-    user: req.user,
-    num: Math.random() * 100
-  });
-}
 
-module.exports = { login, getRandomNumber };
+module.exports = { login };
